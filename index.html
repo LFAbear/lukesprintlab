@@ -1,0 +1,1333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Luke's PrintLab | lukesprintlab.com</title>
+  <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Barlow+Condensed:wght@400;600;700&family=Barlow:wght@400;500&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --ink: #1a1208;
+      --wood: #d4b896;
+      --wood-light: #e8d5bc;
+      --wood-dark: #8b6340;
+      --laser: #ff6b1a;
+      --laser-glow: #ff9a4a;
+      --steel: #c8c0b4;
+      --bg: #f0e8dc;
+      --bg-dark: #1a1208;
+      --accent: #ff6b1a;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Barlow', sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      overflow-x: hidden;
+    }
+
+    /* ── GRAIN OVERLAY ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 999;
+      opacity: 0.4;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      background: var(--bg-dark);
+      border-bottom: 3px solid var(--laser);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      height: 64px;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+
+    .nav-logo-icon { width: 36px; height: 36px; }
+
+    .nav-logo-text {
+      font-family: 'Black Han Sans', sans-serif;
+      font-size: 1.1rem;
+      color: #fff;
+      letter-spacing: 0.05em;
+      line-height: 1.1;
+    }
+    .nav-logo-text span { color: var(--laser); }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 600;
+      font-size: 0.95rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--steel);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--laser); }
+
+    /* ── HERO ── */
+    #home {
+      min-height: 100vh;
+      background: var(--bg-dark);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      padding: 80px 2rem 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Wood grain lines behind hero */
+    #home::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        92deg,
+        transparent,
+        transparent 48px,
+        rgba(212,184,150,0.03) 48px,
+        rgba(212,184,150,0.03) 50px
+      );
+      pointer-events: none;
+    }
+
+    .hero-logo {
+      width: min(420px, 90vw);
+      margin-bottom: 2.5rem;
+      animation: fadeUp 0.9s ease both;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .hero-tagline {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: clamp(1rem, 3vw, 1.4rem);
+      font-weight: 600;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--steel);
+      animation: fadeUp 0.9s 0.2s ease both;
+    }
+
+    .hero-tagline span { color: var(--laser); }
+
+    .hero-cta {
+      margin-top: 2.5rem;
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      animation: fadeUp 0.9s 0.4s ease both;
+    }
+
+    .btn {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 1rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 0.75rem 2rem;
+      border: 2px solid var(--laser);
+      text-decoration: none;
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+
+    .btn-primary {
+      background: var(--laser);
+      color: #fff;
+    }
+    .btn-primary:hover { background: var(--laser-glow); border-color: var(--laser-glow); }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--laser);
+    }
+    .btn-outline:hover { background: var(--laser); color: #fff; }
+
+    /* ── SECTION BASE ── */
+    section {
+      padding: 5rem 2rem;
+    }
+
+    .section-label {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 0.8rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--laser);
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .section-label::after {
+      content: '';
+      height: 2px;
+      width: 40px;
+      background: var(--laser);
+      display: inline-block;
+    }
+
+    .section-title {
+      font-family: 'Black Han Sans', sans-serif;
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      line-height: 1;
+      letter-spacing: 0.03em;
+    }
+
+    /* ── SERVICES STRIP ── */
+    #services {
+      background: var(--bg-dark);
+      padding: 3rem 2rem;
+    }
+
+    .services-grid {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.5px;
+      border: 1.5px solid #333;
+    }
+
+    .service-card {
+      background: #221a10;
+      padding: 2rem 1.5rem;
+      border: 1.5px solid #333;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .service-card:hover {
+      border-color: var(--laser);
+      background: #2a1e0e;
+    }
+
+    .service-icon {
+      width: 44px;
+      height: 44px;
+      margin-bottom: 1rem;
+    }
+
+    .service-name {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 1.1rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #fff;
+      margin-bottom: 0.5rem;
+    }
+
+    .service-desc {
+      font-size: 0.9rem;
+      color: var(--steel);
+      line-height: 1.6;
+    }
+
+    /* ── GALLERY ── */
+    #gallery {
+      background: var(--bg);
+      max-width: 100%;
+    }
+
+    .gallery-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .gallery-header {
+      margin-bottom: 3rem;
+    }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1rem;
+    }
+
+    .gallery-item {
+      position: relative;
+      overflow: hidden;
+      background: var(--wood-dark);
+      aspect-ratio: 1;
+      cursor: pointer;
+    }
+
+    .gallery-item::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, #3d2b14 0%, #1a1208 100%);
+      z-index: 0;
+    }
+
+    /* Wood grain texture per card */
+    .gallery-item::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        88deg,
+        transparent,
+        transparent 8px,
+        rgba(255,255,255,0.02) 8px,
+        rgba(255,255,255,0.02) 9px
+      );
+      z-index: 1;
+    }
+
+    .gallery-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      position: relative;
+      z-index: 2;
+      transition: transform 0.4s ease, opacity 0.3s;
+    }
+
+    .gallery-placeholder {
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      padding: 1.5rem;
+    }
+
+    .gallery-placeholder svg { opacity: 0.5; }
+
+    .gallery-placeholder-label {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 600;
+      font-size: 0.85rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--wood);
+      text-align: center;
+    }
+
+    .gallery-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(255,107,26,0.85);
+      z-index: 3;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.3s;
+      padding: 1.5rem;
+      text-align: center;
+    }
+
+    .gallery-item:hover .gallery-overlay { opacity: 1; }
+    .gallery-item:hover img { transform: scale(1.05); }
+
+    .gallery-overlay-title {
+      font-family: 'Black Han Sans', sans-serif;
+      font-size: 1.4rem;
+      color: #fff;
+      letter-spacing: 0.05em;
+    }
+
+    .gallery-overlay-tag {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.8rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.8);
+      margin-top: 0.3rem;
+    }
+
+    .gallery-section-label {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 1.1rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--laser);
+      margin-bottom: 1rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 2px solid #d4b89630;
+    }
+
+    .gallery-upload-note {
+      margin-top: 2rem;
+      padding: 1.25rem 1.5rem;
+      border: 2px dashed var(--wood-dark);
+      color: var(--wood-dark);
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      font-size: 0.95rem;
+      text-align: center;
+      max-width: 500px;
+    }
+
+    /* ── ABOUT ── */
+    #about {
+      background: #221a10;
+      color: #fff;
+    }
+
+    .about-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: center;
+    }
+
+    @media (max-width: 768px) {
+      .about-inner { grid-template-columns: 1fr; gap: 3rem; }
+    }
+
+    .about-photo-frame {
+      position: relative;
+    }
+
+    .about-photo-placeholder {
+      width: 100%;
+      aspect-ratio: 3/4;
+      background: #2e2010;
+      border: 3px solid #3d2b14;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .about-photo-placeholder::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        90deg, transparent, transparent 12px,
+        rgba(255,255,255,0.015) 12px, rgba(255,255,255,0.015) 13px
+      );
+    }
+
+    .about-photo-label {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 600;
+      font-size: 0.85rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--wood);
+      opacity: 0.7;
+    }
+
+    .about-corner {
+      position: absolute;
+      width: 24px;
+      height: 24px;
+      border-color: var(--laser);
+      border-style: solid;
+    }
+    .about-corner.tl { top: 12px; left: 12px; border-width: 3px 0 0 3px; }
+    .about-corner.tr { top: 12px; right: 12px; border-width: 3px 3px 0 0; }
+    .about-corner.bl { bottom: 12px; left: 12px; border-width: 0 0 3px 3px; }
+    .about-corner.br { bottom: 12px; right: 12px; border-width: 0 3px 3px 0; }
+
+    .about-frame-accent {
+      position: absolute;
+      bottom: -12px;
+      right: -12px;
+      width: calc(100% - 24px);
+      height: calc(100% - 24px);
+      border: 2px solid var(--laser);
+      z-index: -1;
+    }
+
+    .about-content .section-title { color: #fff; margin-bottom: 1.5rem; }
+
+    .about-bio {
+      font-size: 1.05rem;
+      line-height: 1.8;
+      color: var(--steel);
+      margin-bottom: 1.5rem;
+    }
+
+    .about-bio strong { color: var(--laser); font-weight: 600; }
+
+    .about-stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      margin-top: 2rem;
+      border-top: 1px solid #3d2b14;
+      padding-top: 2rem;
+    }
+
+    .stat-num {
+      font-family: 'Black Han Sans', sans-serif;
+      font-size: 2.2rem;
+      color: var(--laser);
+      line-height: 1;
+    }
+
+    .stat-label {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.8rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--steel);
+      margin-top: 0.25rem;
+    }
+
+    /* ── CONTACT ── */
+    #contact {
+      background: var(--bg);
+    }
+
+    .contact-inner {
+      max-width: 900px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1.5fr;
+      gap: 4rem;
+      align-items: start;
+    }
+
+    @media (max-width: 768px) {
+      .contact-inner { grid-template-columns: 1fr; gap: 3rem; }
+    }
+
+    .contact-info .section-title { margin-bottom: 1.5rem; }
+
+    .contact-detail {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+
+    .contact-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+
+    .contact-icon {
+      width: 40px;
+      height: 40px;
+      background: var(--bg-dark);
+      border: 2px solid var(--laser);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .contact-item-text {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+
+    .contact-item-label {
+      font-size: 0.75rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--wood-dark);
+      margin-bottom: 0.2rem;
+    }
+
+    .contact-item-value { color: var(--ink); font-size: 1rem; }
+
+    /* Form */
+    .contact-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .form-label {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 0.8rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--wood-dark);
+    }
+
+    .form-input, .form-select, .form-textarea {
+      background: #fff;
+      border: 2px solid var(--wood);
+      padding: 0.75rem 1rem;
+      font-family: 'Barlow', sans-serif;
+      font-size: 0.95rem;
+      color: var(--ink);
+      outline: none;
+      transition: border-color 0.2s;
+      width: 100%;
+      appearance: none;
+    }
+
+    .form-input:focus, .form-select:focus, .form-textarea:focus {
+      border-color: var(--laser);
+    }
+
+    .form-textarea { resize: vertical; min-height: 130px; }
+
+    .form-submit {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 1rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 0.9rem 2rem;
+      background: var(--laser);
+      color: #fff;
+      border: 2px solid var(--laser);
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      width: fit-content;
+    }
+
+    .form-submit:hover { background: var(--ink); border-color: var(--ink); }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--bg-dark);
+      border-top: 3px solid var(--laser);
+      padding: 2.5rem 2rem;
+      text-align: center;
+    }
+
+    .footer-logo {
+      font-family: 'Black Han Sans', sans-serif;
+      font-size: 1.5rem;
+      color: #fff;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.5rem;
+    }
+    .footer-logo span { color: var(--laser); }
+
+    .footer-tagline {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.85rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--steel);
+      margin-bottom: 1.5rem;
+    }
+
+    .footer-copy {
+      font-size: 0.8rem;
+      color: #4a3a28;
+    }
+
+    /* ── LASER SCAN ANIMATION ── */
+    @keyframes laserScan {
+      0%   { transform: scaleX(0); opacity: 1; }
+      50%  { transform: scaleX(1); opacity: 1; }
+      100% { transform: scaleX(0); opacity: 0; }
+    }
+
+    .laser-line {
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--laser), transparent);
+      animation: laserScan 2s ease-in-out infinite;
+      transform-origin: left;
+      margin: 1.5rem 0;
+    }
+
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#home" class="nav-logo">
+    <!-- Mini logo SVG -->
+    <svg class="nav-logo-icon" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="2" y="2" width="40" height="38" rx="4" stroke="#ff6b1a" stroke-width="2.5"/>
+      <line x1="22" y1="2" x2="22" y2="11" stroke="#ff6b1a" stroke-width="2.5"/>
+      <rect x="15" y="11" width="14" height="8" rx="1.5" stroke="#ff6b1a" stroke-width="2"/>
+      <line x1="22" y1="19" x2="22" y2="24" stroke="#ff6b1a" stroke-width="2"/>
+      <polygon points="22,25 31,29 31,37 22,41 13,37 13,29" stroke="#ff6b1a" stroke-width="2" fill="none"/>
+      <line x1="22" y1="25" x2="22" y2="33" stroke="#ff6b1a" stroke-width="1.5"/>
+      <line x1="22" y1="33" x2="31" y2="37" stroke="#ff6b1a" stroke-width="1.5"/>
+      <line x1="22" y1="33" x2="13" y2="37" stroke="#ff6b1a" stroke-width="1.5"/>
+    </svg>
+    <div class="nav-logo-text">LUKE'S <span>PRINT</span> LAB</div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#gallery">Gallery</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#contact">Order</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="home">
+  <!-- Full SVG logo recreation -->
+  <!-- Logo: 3D printer icon LEFT, stacked text RIGHT -->
+  <svg class="hero-logo" viewBox="0 0 500 285" fill="none" xmlns="http://www.w3.org/2000/svg">
+
+    <!-- ── TEXT (right column) ── -->
+    <text x="200" y="80"  font-family="'Black Han Sans', sans-serif" font-size="80" fill="#d4b896" letter-spacing="2">LUKE'S</text>
+    <text x="200" y="170" font-family="'Black Han Sans', sans-serif" font-size="80" fill="#d4b896" letter-spacing="2">PRINT</text>
+    <text x="200" y="260" font-family="'Black Han Sans', sans-serif" font-size="80" fill="#d4b896" letter-spacing="2">LAB</text>
+    <text x="202" y="278" font-family="'Barlow', sans-serif" font-size="17" fill="#8b6340" font-style="italic">(and laser cutting)</text>
+
+    <!-- ── PRINTER BOX: top=15 (aligns with cap-top of LUKE'S), bottom=260 ── -->
+    <rect x="5" y="15" width="178" height="245" rx="22" stroke="#d4b896" stroke-width="10" fill="none"/>
+
+    <!-- Arm starts just inside top border (y=20) -->
+    <line x1="94" y1="20" x2="94" y2="56" stroke="#d4b896" stroke-width="10"/>
+    <!-- Trapezoid nozzle -->
+    <polygon points="68,56 120,56 106,84 82,84" stroke="#d4b896" stroke-width="5" fill="#d4b896"/>
+    <!-- Drip line -->
+    <line x1="94" y1="84" x2="94" y2="100" stroke="#d4b896" stroke-width="5"/>
+
+    <!-- Isometric cube: fills y=104 to y=250 (snug above bottom border at y=260) -->
+    <polygon points="94,104 156,135 94,166 32,135"
+             stroke="#d4b896" stroke-width="7" fill="none" stroke-linejoin="round"/>
+    <!-- Left face -->
+    <polygon points="32,135 94,166 94,250 32,219"
+             stroke="#d4b896" stroke-width="7" fill="none" stroke-linejoin="round"/>
+    <!-- Right face -->
+    <polygon points="156,135 94,166 94,250 156,219"
+             stroke="#d4b896" stroke-width="7" fill="none" stroke-linejoin="round"/>
+
+  </svg>
+
+  <p class="hero-tagline">Custom <span>3D Prints</span> &amp; <span>Laser Cuts</span> — Made by an 8-year-old Maker</p>
+
+  <div class="hero-cta">
+    <a href="#gallery" class="btn btn-primary">See the Work</a>
+    <a href="#contact" class="btn btn-outline">Place an Order</a>
+  </div>
+</section>
+
+<!-- SERVICES STRIP -->
+<section id="services">
+  <div class="services-grid">
+    <div class="service-card">
+      <svg class="service-icon" viewBox="0 0 44 44" fill="none">
+        <rect x="4" y="6" width="24" height="24" rx="3" stroke="#ff6b1a" stroke-width="2.5"/>
+        <line x1="16" y1="6" x2="16" y2="12" stroke="#ff6b1a" stroke-width="2.5"/>
+        <rect x="10" y="16" width="12" height="10" rx="1" stroke="#ff6b1a" stroke-width="2"/>
+        <rect x="28" y="28" width="12" height="10" rx="2" stroke="#d4b896" stroke-width="2"/>
+      </svg>
+      <div class="service-name">3D Printing</div>
+      <div class="service-desc">Toys, figurines, custom parts, vaults & more — printed layer by layer.</div>
+    </div>
+    <div class="service-card">
+      <svg class="service-icon" viewBox="0 0 44 44" fill="none">
+        <line x1="22" y1="2" x2="22" y2="18" stroke="#ff6b1a" stroke-width="2.5"/>
+        <line x1="22" y1="20" x2="14" y2="30" stroke="#ff6b1a" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="22" y1="20" x2="30" y2="30" stroke="#ff6b1a" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="22" y1="20" x2="8" y2="22" stroke="#ff6b1a" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="22" y1="20" x2="36" y2="22" stroke="#ff6b1a" stroke-width="2.5" stroke-linecap="round"/>
+        <circle cx="22" cy="20" r="4" fill="#ff6b1a"/>
+      </svg>
+      <div class="service-name">Laser Cutting</div>
+      <div class="service-desc">Precision cuts on wood, acrylic & more. Custom signs, patterns & designs.</div>
+    </div>
+    <div class="service-card">
+      <svg class="service-icon" viewBox="0 0 44 44" fill="none">
+        <rect x="6" y="10" width="32" height="24" rx="2" stroke="#ff6b1a" stroke-width="2.5"/>
+        <line x1="14" y1="18" x2="30" y2="18" stroke="#d4b896" stroke-width="2"/>
+        <line x1="14" y1="24" x2="24" y2="24" stroke="#d4b896" stroke-width="2"/>
+      </svg>
+      <div class="service-name">Custom Orders</div>
+      <div class="service-desc">Got an idea? Luke can bring it to life. Send a message and let's make it.</div>
+    </div>
+    <div class="service-card">
+      <svg class="service-icon" viewBox="0 0 44 44" fill="none">
+        <path d="M22 6 L28 18 L42 20 L32 30 L34 44 L22 38 L10 44 L12 30 L2 20 L16 18 Z" stroke="#ff6b1a" stroke-width="2.5" fill="none"/>
+      </svg>
+      <div class="service-name">Seasonal Gifts</div>
+      <div class="service-desc">Holiday ornaments, personalized gifts, and special occasion pieces.</div>
+    </div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section id="gallery">
+  <div class="gallery-inner">
+    <div class="gallery-header">
+      <div class="section-label">Fresh From The Lab</div>
+      <h2 class="section-title">The Gallery</h2>
+    </div>
+    <div class="laser-line"></div>
+
+    <!-- ── 3D PRINTING SECTION ── -->
+    <div class="gallery-section-label">
+      <svg width="20" height="20" viewBox="0 0 44 44" fill="none">
+        <rect x="4" y="6" width="36" height="30" rx="4" stroke="#ff6b1a" stroke-width="3"/>
+        <line x1="22" y1="6" x2="22" y2="14" stroke="#ff6b1a" stroke-width="3"/>
+        <polygon points="14,14 30,14 26,22 18,22" fill="#ff6b1a"/>
+        <line x1="22" y1="22" x2="22" y2="27" stroke="#ff6b1a" stroke-width="2.5"/>
+        <polygon points="22,28 31,32 31,40 22,44 13,40 13,32" stroke="#ff6b1a" stroke-width="2" fill="none"/>
+      </svg>
+      3D Printing
+    </div>
+    <div class="gallery-grid">
+
+      <!-- Spartan Warrior figurine -->
+      <div class="gallery-item">
+        <img src="spartan.jpeg" alt="3D printed Spartan warrior figurine in gold and red"/>
+        <div class="gallery-overlay">
+          <div class="gallery-overlay-title">Spartan Warrior</div>
+          <div class="gallery-overlay-tag">3D Printed Figurine</div>
+        </div>
+      </div>
+
+      <!-- Dragon figurine -->
+      <div class="gallery-item">
+        <img src="dragon.jpeg" alt="3D printed articulated red and black dragon figurine"/>
+        <div class="gallery-overlay">
+          <div class="gallery-overlay-title">Articulated Dragon</div>
+          <div class="gallery-overlay-tag">3D Printed Figurine</div>
+        </div>
+      </div>
+
+      <!-- T-Rex skeleton -->
+      <div class="gallery-item">
+        <img src="trex.jpeg" alt="3D printed T-Rex skeleton on display stand"/>
+        <div class="gallery-overlay">
+          <div class="gallery-overlay-title">T-Rex Skeleton</div>
+          <div class="gallery-overlay-tag">3D Printed Figurine</div>
+        </div>
+      </div>
+
+      <!-- Dragon skulls -->
+      <div class="gallery-item">
+        <img src="dragonskull.jpeg" alt="3D printed dragon skulls in tan"/>
+        <div class="gallery-overlay">
+          <div class="gallery-overlay-title">Dragon Skulls</div>
+          <div class="gallery-overlay-tag">3D Printed Figurine</div>
+        </div>
+      </div>
+
+      <!-- Water gun T-15 -->
+      <div class="gallery-item">
+        <img src="watergun1.jpeg" alt="3D printed T-15 water gun in blue and grey"/>
+        <div class="gallery-overlay">
+          <div class="gallery-overlay-title">T-15 Water Gun</div>
+          <div class="gallery-overlay-tag">3D Printed</div>
+        </div>
+      </div>
+
+      <!-- Water gun yellow/blue -->
+      <div class="gallery-item">
+        <img src="watergun2.jpeg" alt="3D printed water gun in yellow and blue with drum magazine"/>
+        <div class="gallery-overlay">
+          <div class="gallery-overlay-title">Drum Mag Water Gun</div>
+          <div class="gallery-overlay-tag">3D Printed</div>
+        </div>
+      </div>
+
+      <!-- Water gun purple/green in action -->
+      <div class="gallery-item">
+        <img src="watergun3.jpeg" alt="3D printed purple and green water gun shooting"/>
+        <div class="gallery-overlay">
+          <div class="gallery-overlay-title">Water Gun in Action</div>
+          <div class="gallery-overlay-tag">3D Printed</div>
+        </div>
+      </div>
+
+      <!-- RC Christmas Snowcat -->
+      <div class="gallery-item">
+        <img src="snowcat.jpeg" alt="3D printed RC Christmas Snowcat with reindeer antlers and gifts"/>
+        <div class="gallery-overlay">
+          <div class="gallery-overlay-title">RC Christmas Snowcat</div>
+          <div class="gallery-overlay-tag">3D Printed · RC</div>
+        </div>
+      </div>
+
+      <!-- Marble run lamp -->
+      <div class="gallery-item">
+        <img src="lamp_marble.jpeg" alt="3D printed marble run lamp with glowing blue light"/>
+        <div class="gallery-overlay">
+          <div class="gallery-overlay-title">Marble Run Lamp</div>
+          <div class="gallery-overlay-tag">3D Printed · Lamp</div>
+        </div>
+      </div>
+
+      <!-- Diet Coke lamp open -->
+      <div class="gallery-item">
+        <img src="lamp_coke1.jpeg" alt="3D printed secret Diet Coke can lamp open showing light inside"/>
+        <div class="gallery-overlay">
+          <div class="gallery-overlay-title">Secret Coke Lamp</div>
+          <div class="gallery-overlay-tag">3D Printed · Lamp</div>
+        </div>
+      </div>
+
+      <!-- Diet Coke lamp closed -->
+      <div class="gallery-item">
+        <img src="lamp_coke2.jpeg" alt="3D printed Diet Coke can lamp closed"/>
+        <div class="gallery-overlay">
+          <div class="gallery-overlay-title">Diet Coke Can Lamp</div>
+          <div class="gallery-overlay-tag">3D Printed · Lamp</div>
+        </div>
+      </div>
+
+      <!-- Shoes — 3D printed with laser engraved insoles -->
+      <div class="gallery-item">
+        <img src="shoes.jpeg" alt="3D printed blue shoes with laser engraved whaleberry insoles"/>
+        <div class="gallery-overlay">
+          <div class="gallery-overlay-title">3D Printed Shoes</div>
+          <div class="gallery-overlay-tag">3D Printed</div>
+        </div>
+      </div>
+
+      <!-- Easter eggs lineup -->
+      <div class="gallery-item">
+        <img src="easter1.jpeg" alt="3D printed Easter eggs in multiple colors"/>
+        <div class="gallery-overlay">
+          <div class="gallery-overlay-title">Easter Eggs</div>
+          <div class="gallery-overlay-tag">Seasonal · 3D Printed</div>
+        </div>
+      </div>
+
+      <!-- Easter bunny eggs -->
+      <div class="gallery-item">
+        <img src="easter2.jpeg" alt="3D printed Easter bunny eggs with ears"/>
+        <div class="gallery-overlay">
+          <div class="gallery-overlay-title">Bunny Eggs</div>
+          <div class="gallery-overlay-tag">Seasonal · 3D Printed</div>
+        </div>
+      </div>
+
+      <!-- Spiral Easter egg closeup -->
+      <div class="gallery-item">
+        <img src="easter3.jpeg" alt="3D printed spiral Easter egg in rose gold"/>
+        <div class="gallery-overlay">
+          <div class="gallery-overlay-title">Spiral Egg</div>
+          <div class="gallery-overlay-tag">Seasonal · 3D Printed</div>
+        </div>
+      </div>
+
+      <!-- Three bunny eggs -->
+      <div class="gallery-item">
+        <img src="easter4.jpeg" alt="3D printed bunny eggs trio in yellow blue and orange"/>
+        <div class="gallery-overlay">
+          <div class="gallery-overlay-title">Bunny Egg Trio</div>
+          <div class="gallery-overlay-tag">Seasonal · 3D Printed</div>
+        </div>
+      </div>
+
+      <!-- Vault 1 -->
+      <div class="gallery-item">
+        <img src="IMG_1574.jpeg" alt="3D printed bronze vault with red key"/>
+        <div class="gallery-overlay">
+          <div class="gallery-overlay-title">Key Lock Vault</div>
+          <div class="gallery-overlay-tag">3D Printed</div>
+        </div>
+      </div>
+
+      <!-- Vault 2 -->
+      <div class="gallery-item">
+        <img src="IMG_1573.jpeg" alt="3D printed black vault with red key"/>
+        <div class="gallery-overlay">
+          <div class="gallery-overlay-title">Black Vault</div>
+          <div class="gallery-overlay-tag">3D Printed</div>
+        </div>
+      </div>
+
+      <!-- Vault 3 -->
+      <div class="gallery-item">
+        <img src="IMG_1572.jpeg" alt="Two 3D printed vaults side by side, doors open"/>
+        <div class="gallery-overlay">
+          <div class="gallery-overlay-title">Vault Collection</div>
+          <div class="gallery-overlay-tag">3D Printed</div>
+        </div>
+      </div>
+
+      <!-- Vault 4 -->
+      <div class="gallery-item">
+        <img src="IMG_1570.jpeg" alt="Three 3D printed vaults stacked"/>
+        <div class="gallery-overlay">
+          <div class="gallery-overlay-title">Vault Lineup</div>
+          <div class="gallery-overlay-tag">3D Printed</div>
+        </div>
+      </div>
+
+      <!-- Vault 5 -->
+      <div class="gallery-item">
+        <img src="IMG_1568.jpeg" alt="3D printed coin sorting vault with visible gears"/>
+        <div class="gallery-overlay">
+          <div class="gallery-overlay-title">Gear Vault</div>
+          <div class="gallery-overlay-tag">3D Printed</div>
+        </div>
+      </div>
+
+      <!-- Vault 6 -->
+      <div class="gallery-item">
+        <img src="IMG_1567.jpeg" alt="3D printed coin sorting vault open showing drawers"/>
+        <div class="gallery-overlay">
+          <div class="gallery-overlay-title">Coin Sorting Vault</div>
+          <div class="gallery-overlay-tag">3D Printed</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ── LASER CUTTING SECTION ── -->
+    <div class="gallery-section-label" style="margin-top:3rem;">
+      <svg width="20" height="20" viewBox="0 0 44 44" fill="none">
+        <line x1="22" y1="2" x2="22" y2="18" stroke="#ff6b1a" stroke-width="3"/>
+        <polygon points="14,18 30,18 26,28 18,28" fill="#ff6b1a"/>
+        <line x1="22" y1="28" x2="22" y2="34" stroke="#ff6b1a" stroke-width="2.5"/>
+        <line x1="22" y1="34" x2="10" y2="44" stroke="#ff6b1a" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="22" y1="34" x2="34" y2="44" stroke="#ff6b1a" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="22" y1="34" x2="6"  y2="36" stroke="#ff6b1a" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="22" y1="34" x2="38" y2="36" stroke="#ff6b1a" stroke-width="2.5" stroke-linecap="round"/>
+        <circle cx="22" cy="34" r="3" fill="#ff6b1a"/>
+      </svg>
+      Laser Cutting
+    </div>
+    <div class="gallery-grid">
+
+      <!-- X-Wing Star Fighter -->
+      <div class="gallery-item">
+        <img src="IMG_1458.jpeg" alt="Laser cut wooden X-Wing Star Fighter model"/>
+        <div class="gallery-overlay">
+          <div class="gallery-overlay-title">X-Wing Fighter</div>
+          <div class="gallery-overlay-tag">Laser Cut</div>
+        </div>
+      </div>
+
+      <!-- Mandalorian Razor Crest -->
+      <div class="gallery-item">
+        <img src="mandalorian.jpeg" alt="Laser cut wooden Mandalorian Razor Crest ship on stand"/>
+        <div class="gallery-overlay">
+          <div class="gallery-overlay-title">Razor Crest</div>
+          <div class="gallery-overlay-tag">Laser Cut</div>
+        </div>
+      </div>
+
+      <!-- Coaster — laser engraved leather -->
+      <div class="gallery-item">
+        <img src="coaster.jpeg" alt="Laser engraved Luke's Print Lab leather coaster"/>
+        <div class="gallery-overlay">
+          <div class="gallery-overlay-title">Custom Coaster</div>
+          <div class="gallery-overlay-tag">Laser Engraved</div>
+        </div>
+      </div>
+
+      <!-- Laser engraved insoles -->
+      <div class="gallery-item">
+        <img src="insoles.jpeg" alt="Laser engraved whaleberry shoe insoles"/>
+        <div class="gallery-overlay">
+          <div class="gallery-overlay-title">Engraved Insoles</div>
+          <div class="gallery-overlay-tag">Laser Engraved</div>
+        </div>
+      </div>
+
+      <!-- Placeholder — Custom Gifts -->
+      <div class="gallery-item">
+        <div class="gallery-placeholder">
+          <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+            <rect x="8" y="18" width="32" height="24" rx="2" stroke="#d4b896" stroke-width="2.5"/>
+            <line x1="24" y1="18" x2="24" y2="42" stroke="#d4b896" stroke-width="2"/>
+            <line x1="8" y1="24" x2="40" y2="24" stroke="#d4b896" stroke-width="2"/>
+            <path d="M24 18 Q18 10 14 14 Q10 18 24 18 Q38 18 34 14 Q30 10 24 18" stroke="#d4b896" stroke-width="2" fill="none"/>
+          </svg>
+          <span class="gallery-placeholder-label">Custom Gifts<br/><span style="opacity:0.5;font-size:0.75rem">Upload your photo</span></span>
+        </div>
+        <div class="gallery-overlay">
+          <div class="gallery-overlay-title">Custom Gifts</div>
+          <div class="gallery-overlay-tag">Laser Cut</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ── LUKE IN ACTION SECTION ── -->
+    <div class="gallery-section-label" style="margin-top:3rem;">
+      <svg width="20" height="20" viewBox="0 0 44 44" fill="none">
+        <circle cx="22" cy="10" r="6" stroke="#ff6b1a" stroke-width="3"/>
+        <path d="M10 44 Q10 28 22 26 Q34 28 34 44" stroke="#ff6b1a" stroke-width="3" fill="none"/>
+        <line x1="22" y1="26" x2="16" y2="36" stroke="#ff6b1a" stroke-width="3" stroke-linecap="round"/>
+        <line x1="22" y1="26" x2="28" y2="36" stroke="#ff6b1a" stroke-width="3" stroke-linecap="round"/>
+      </svg>
+      Luke In Action
+    </div>
+    <div class="gallery-grid">
+
+      <div class="gallery-item">
+        <img src="action1.jpeg" alt="Luke building RC car tracks at the table"/>
+        <div class="gallery-overlay">
+          <div class="gallery-overlay-title">Building RC Tracks</div>
+          <div class="gallery-overlay-tag">In The Lab</div>
+        </div>
+      </div>
+
+      <div class="gallery-item">
+        <img src="action2.jpeg" alt="Luke assembling RC car parts"/>
+        <div class="gallery-overlay">
+          <div class="gallery-overlay-title">RC Car Assembly</div>
+          <div class="gallery-overlay-tag">In The Lab</div>
+        </div>
+      </div>
+
+      <div class="gallery-item">
+        <img src="action3.jpeg" alt="Luke working on RC car build"/>
+        <div class="gallery-overlay">
+          <div class="gallery-overlay-title">Deep In The Build</div>
+          <div class="gallery-overlay-tag">In The Lab</div>
+        </div>
+      </div>
+
+      <div class="gallery-item">
+        <img src="action4.jpeg" alt="Bambu Lab X1C printer in action"/>
+        <div class="gallery-overlay">
+          <div class="gallery-overlay-title">Bambu Lab X1C Printing</div>
+          <div class="gallery-overlay-tag">The Machines</div>
+        </div>
+      </div>
+
+      <div class="gallery-item">
+        <img src="action5.jpeg" alt="Luke at his lab desk designing on computer"/>
+        <div class="gallery-overlay">
+          <div class="gallery-overlay-title">Designing at the Lab</div>
+          <div class="gallery-overlay-tag">In The Lab</div>
+        </div>
+      </div>
+
+      <div class="gallery-item">
+        <img src="action6.jpeg" alt="Bambu Lab printer with red filament"/>
+        <div class="gallery-overlay">
+          <div class="gallery-overlay-title">Bambu Lab Printing</div>
+          <div class="gallery-overlay-tag">The Machines</div>
+        </div>
+      </div>
+
+      <div class="gallery-item">
+        <img src="action7.jpeg" alt="Luke with candy vending machine build in progress"/>
+        <div class="gallery-overlay">
+          <div class="gallery-overlay-title">Vending Machine Build</div>
+          <div class="gallery-overlay-tag">In The Lab</div>
+        </div>
+      </div>
+
+      <div class="gallery-item">
+        <img src="action8.jpeg" alt="Luke carefully screwing parts together"/>
+        <div class="gallery-overlay">
+          <div class="gallery-overlay-title">Precision Work</div>
+          <div class="gallery-overlay-tag">In The Lab</div>
+        </div>
+      </div>
+
+      <div class="gallery-item">
+        <img src="action9.jpeg" alt="Luke celebrating with arms up next to his first printer"/>
+        <div class="gallery-overlay">
+          <div class="gallery-overlay-title">First Printer Day! 🎉</div>
+          <div class="gallery-overlay-tag">Where It All Started</div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="gallery-upload-note">
+      📸 Ready to show off Luke's work? Replace these placeholders by uploading real product photos!
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="about-inner">
+    <div class="about-photo-frame">
+      <div class="about-photo-placeholder" style="padding:0; overflow:hidden;">
+        <div class="about-corner tl"></div>
+        <div class="about-corner tr"></div>
+        <div class="about-corner bl"></div>
+        <div class="about-corner br"></div>
+        <img src="IMG_4981.jpeg"
+             alt="Luke standing in front of a Tesla Optimus robot"
+             style="width:100%; height:100%; object-fit:cover; object-position:center top; display:block;"/>
+      </div>
+      <div class="about-frame-accent"></div>
+    </div>
+    <div class="about-content">
+      <div class="section-label">The Maker Behind the Magic</div>
+      <h2 class="section-title" style="color:#fff;">Meet Luke</h2>
+      <div class="laser-line"></div>
+      <p class="about-bio">
+        Hi, I'm <strong>Luke</strong> — I'm <strong>8 years old</strong>, in second grade, and the youngest of four kids. I started 3D printing about <strong>18 months ago</strong> on an X-Maker, and I've leveled up since then — I now run a <strong>Bambu Labs X1C</strong> and an <strong>H2C Laser Edition</strong>. I love both printing and designing my own projects from scratch.
+      </p>
+      <p class="about-bio">
+        Check out my gallery — I've printed <strong>water guns, fidget toys, RC cars, candy vending machines, safes, coin sorting vaults</strong>, and even <strong>shoes</strong>. I can also design logos, print coasters, or make custom business cards.
+      </p>
+      <p class="about-bio">
+        One day I hope to open my own full Print Lab with my Dad. Until then, if you have an idea or a custom project in mind — <strong>reach out and let's make it happen!</strong>
+      </p>
+      <div class="about-stats">
+        <div>
+          <div class="stat-num">8</div>
+          <div class="stat-label">Years Young</div>
+        </div>
+        <div>
+          <div class="stat-num">2</div>
+          <div class="stat-label">Pro Machines</div>
+        </div>
+        <div>
+          <div class="stat-num">18<span style="font-size:1.2rem">mo</span></div>
+          <div class="stat-label">Printing Since</div>
+        </div>
+        <div>
+          <div class="stat-num">∞</div>
+          <div class="stat-label">Ideas</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="contact-inner">
+    <div class="contact-info">
+      <div class="section-label">Place an Order</div>
+      <h2 class="section-title">Let's Make<br/>Something</h2>
+      <div class="laser-line"></div>
+      <p style="color:var(--wood-dark); line-height:1.7; font-size:0.95rem; margin-bottom:1rem;">
+        Have an idea? Want something custom? Fill out the form and Luke (with a little help) will get back to you with details on your order.
+      </p>
+      <div class="contact-detail">
+        <div class="contact-item">
+          <div class="contact-icon">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+              <rect x="2" y="4" width="16" height="12" rx="2" stroke="#ff6b1a" stroke-width="2"/>
+              <path d="M2 7 L10 12 L18 7" stroke="#ff6b1a" stroke-width="2"/>
+            </svg>
+          </div>
+          <div class="contact-item-text">
+            <div class="contact-item-label">Email</div>
+            <div class="contact-item-value"><a href="mailto:LFAPrintLab@gmail.com" style="color:var(--ink); text-decoration:none;">LFAPrintLab&#64;gmail&#46;com</a></div>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+              <circle cx="10" cy="10" r="8" stroke="#ff6b1a" stroke-width="2"/>
+              <path d="M10 6 L10 10 L14 12" stroke="#ff6b1a" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div class="contact-item-text">
+            <div class="contact-item-label">Turnaround</div>
+            <div class="contact-item-value">3–7 business days</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <form class="contact-form" action="https://formspree.io/f/mojyaykb" method="POST" id="order-form">
+      <div class="form-group">
+        <label class="form-label">Your Name</label>
+        <input type="text" name="name" class="form-input" placeholder="Jane Smith" required/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Email Address</label>
+        <input type="email" name="email" class="form-input" placeholder="jane@email.com" required/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">What Would You Like?</label>
+        <select name="category" class="form-select" required>
+          <option value="">— Select a category —</option>
+          <option>Toys &amp; Figurines</option>
+          <option>Custom Name Sign</option>
+          <option>Shoes</option>
+          <option>Vault</option>
+          <option>Seasonal Gift</option>
+          <option>Laser Cut Design</option>
+          <option>Something Else / Custom</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Tell Luke About Your Idea</label>
+        <textarea name="message" class="form-textarea" placeholder="Describe what you'd like — size, color, special details, anything helps!" required></textarea>
+      </div>
+      <button type="submit" class="form-submit">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+          <path d="M2 9 L16 9 M10 3 L16 9 L10 15" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Send My Order
+      </button>
+      <div id="form-success" style="display:none; margin-top:1rem; padding:1rem; background:#ff6b1a; color:#fff; font-family:'Barlow Condensed',sans-serif; font-weight:700; letter-spacing:0.1em; text-transform:uppercase;">
+        ✓ Order sent! Luke will be in touch soon.
+      </div>
+    </form>
+
+    <script>
+      const form = document.getElementById('order-form');
+      form.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const data = new FormData(form);
+        const response = await fetch(form.action, {
+          method: 'POST',
+          body: data,
+          headers: { 'Accept': 'application/json' }
+        });
+        if (response.ok) {
+          form.reset();
+          document.getElementById('form-success').style.display = 'block';
+        }
+      });
+    </script>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">LUKE'S <span>PRINT</LAB</span><
